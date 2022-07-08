@@ -1,60 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:orthodox_melsalat/components/NavigationDrawer.dart';
+import 'package:orthodox_melsalat/model/question.dart';
 import 'package:orthodox_melsalat/model/topic.dart';
-import 'package:orthodox_melsalat/components/MainAppbar.dart';
 import 'package:http/http.dart' as http;
 class QuestionPage extends StatelessWidget {
-  const QuestionPage({super.key, required this.title , required this.topicid});
+   QuestionPage({super.key, required this.title , required this.topic});
 
   final String title;
-  final String topicid;
+  final Topic topic;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: title,
       home: Scaffold(
-        drawer: NavigationDrawer(),
-        appBar:MainAppBar(title: 'Question',),
-        body:  FutureBuilder<List<Topic>>(
-          future: fetchTopics(http.Client()),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('An error has occurred!'),
-              );
-            } else if (snapshot.hasData) {
-              return TopicsList(Topics: snapshot.data!);
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
+
+drawer: NavigationDrawer(),
+       body: CustomScrollView(
+       slivers: <Widget>[
+         SliverAppBar(
+           title: Text(title),
+           backgroundColor: Colors.green,
+           expandedHeight: 300.0,
+           flexibleSpace: FlexibleSpaceBar(
+             background:  Image.network(topic.banner, fit: BoxFit.cover),
+           ),
+         ),
+         SliverFixedExtentList(
+           itemExtent: 180.0,
+
+           delegate: SliverChildListDelegate(
+             [
+              Container(
+
+                child: FutureBuilder<List<Question>>(
+                 future: fetchQuestions(http.Client(),topic.id),
+                 builder: (context, snapshot) {
+                   if (snapshot.hasError) {
+                     return const Center(
+                       child: Text('An error has occurred!'),
+                     );
+                   } else if (snapshot.hasData) {
+                     return QuestionList(questions: snapshot.data!);
+                   } else {
+                     return const Center(
+                       child: CircularProgressIndicator(),
+                     );
+                   }
+                 },
+               ),
+              )
+             ],
+           ),
+         ),
+       ],
+     ),
+
       ),
     );
   }
 }
 
-class TopicsList extends StatelessWidget {
-  const TopicsList({super.key, required this.Topics});
+class QuestionList extends StatelessWidget {
+  const QuestionList({super.key, required this.questions});
 
-  final List<Topic> Topics;
+  final List<Question> questions;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
 
-      itemCount: Topics.length,
+      itemCount: questions.length,
       itemBuilder: (context, index) {
 
         return ListTile(
-          title: Text(Topics[index].title),
-          subtitle: Text(Topics[index].detail),
-          leading: Image.network(Topics[index].banner),
+          title: Text(questions[index].title),
+          subtitle: Text(questions[index].detail),
+          leading: Image.network(questions[index].attachment),
           trailing: Icon(Icons.arrow_forward_ios_rounded),
+          onTap: (){
 
+
+
+          },
         );
       },
     );

@@ -12,6 +12,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: title,
       home: Scaffold(
         appBar: MainAppBar(title: 'Topics',),
@@ -58,10 +59,9 @@ class TopicsList extends StatelessWidget {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const QuestionPage(
-
+            MaterialPageRoute(builder: (context) =>  QuestionPage(
               title: 'Title',
-              topicid: '1',
+              topic: Topic(id: Topics[index].id, title: Topics[index].title, detail: Topics[index].detail, banner: Topics[index].banner),
             )),
           );
         },
