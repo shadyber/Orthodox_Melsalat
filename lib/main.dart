@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
           title: const Text('Orthodox Mels Alat'),
         ),
         drawer: NavigationDrawer(),
-        body:MyHomePage(title: 'my Home Page'),
+        body:MyHomePage(title: 'Topics Menu'),
       ),
     );
   }
