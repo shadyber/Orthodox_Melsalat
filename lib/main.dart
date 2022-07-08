@@ -10,15 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Orthodox Mels Alat',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Orthodox Mels Alat'),
-        ),
-        drawer: NavigationDrawer(),
-        body:MyHomePage(title: 'Topics Menu'),
-      ),
-    );
+    return MyHomePage(title: 'Topics Menu');
   }
 }

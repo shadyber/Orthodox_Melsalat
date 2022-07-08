@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-
-import 'package:orthodox_melsalat/components/MainAppbar.dart';
+import 'package:orthodox_melsalat/components/NavigationDrawer.dart';
 import 'package:orthodox_melsalat/model/topic.dart';
+import 'package:orthodox_melsalat/components/MainAppbar.dart';
 import 'package:http/http.dart' as http;
-import 'package:orthodox_melsalat/pages/questionspage.dart';
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
+class QuestionPage extends StatelessWidget {
+  const QuestionPage({super.key, required this.title , required this.topicid});
 
   final String title;
+  final String topicid;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: title,
       home: Scaffold(
-        appBar: MainAppBar(title: 'Topics',),
-        body: FutureBuilder<List<Topic>>(
+        drawer: NavigationDrawer(),
+        appBar:MainAppBar(title: 'Question',),
+        body:  FutureBuilder<List<Topic>>(
           future: fetchTopics(http.Client()),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -32,7 +33,6 @@ class MyHomePage extends StatelessWidget {
           },
         ),
       ),
-
     );
   }
 }
@@ -54,17 +54,7 @@ class TopicsList extends StatelessWidget {
           subtitle: Text(Topics[index].detail),
           leading: Image.network(Topics[index].banner),
           trailing: Icon(Icons.arrow_forward_ios_rounded),
-        onTap: (){
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QuestionPage(
-
-              title: 'Title',
-              topicid: '1',
-            )),
-          );
-        },
         );
       },
     );
