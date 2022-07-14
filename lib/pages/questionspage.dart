@@ -79,7 +79,7 @@ class QuestionsList extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) =>  AnswerPage(
                   title: Questions[index].title!,
-                  answer:  Answer(id: Questions[index].answer?.id, shortAnswer: Questions[index].answer?.shortAnswer, longAnswer:Questions[index].answer?.longAnswer),
+                  answer:  Answer(id: Questions[index].answer?.id, shortAnswer: Questions[index].answer?.shortAnswer, longAnswer:Questions[index].answer?.longAnswer),question:  Questions[index]
                 )),
               );
             }

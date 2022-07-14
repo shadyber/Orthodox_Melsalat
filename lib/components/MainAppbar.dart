@@ -8,10 +8,25 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-title: Text(title),
+    title: Text(title),
       actions: [
-        Icon(Icons.question_mark_rounded),
-        Icon(Icons.settings),
+         IconButton(
+          onPressed: (){
+
+          },
+           icon: const Icon(Icons.church_sharp),
+        ),
+        IconButton(
+          onPressed: (){
+
+          },
+          icon:const Icon(Icons.question_mark_rounded),
+        ),
+        IconButton(
+          onPressed: (){
+
+          }, icon: const Icon(Icons.person),
+        )
       ],
 
     );
