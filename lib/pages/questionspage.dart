@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+
+import 'package:orthodox_melsalat/components/MainAppbar.dart';
 import 'package:orthodox_melsalat/components/NavigationDrawer.dart';
+import 'package:orthodox_melsalat/model/answer.dart';
 import 'package:orthodox_melsalat/model/question.dart';
 import 'package:orthodox_melsalat/model/topic.dart';
 import 'package:http/http.dart' as http;
+import 'package:orthodox_melsalat/pages/Answerpage.dart';
+
 class QuestionPage extends StatelessWidget {
-   QuestionPage({super.key, required this.title , required this.topic});
+  const QuestionPage({super.key, required this.title ,required this.topic});
 
   final String title;
   final Topic topic;
@@ -15,73 +20,69 @@ class QuestionPage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: title,
       home: Scaffold(
+        drawer: NavigationDrawer(),
+        appBar: MainAppBar(title: title.toString(),),
+        body: Column(children: <Widget>[
+           Image.network(topic.banner),
+           Text("Question Under this Topic"),
+           Expanded(
+              child:  Align(
+                  alignment: Alignment.bottomCenter,
+                  child: FutureBuilder<List<Question>>(
 
-drawer: NavigationDrawer(),
-       body: CustomScrollView(
-       slivers: <Widget>[
-         SliverAppBar(
-           title: Text(title),
-           backgroundColor: Colors.green,
-           expandedHeight: 300.0,
-           flexibleSpace: FlexibleSpaceBar(
-             background:  Image.network(topic.banner, fit: BoxFit.cover),
-           ),
-         ),
-         SliverFixedExtentList(
-           itemExtent: 180.0,
+                    future: fetchQuestions(http.Client(),topic.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Center(
+                          child: Text('An error has occurred!'),
+                        );
+                      } else if (snapshot.hasData) {
+                        return QuestionsList(Questions: snapshot.data!);
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
 
-           delegate: SliverChildListDelegate(
-             [
-              Container(
-
-                child: FutureBuilder<List<Question>>(
-                 future: fetchQuestions(http.Client(),topic.id),
-                 builder: (context, snapshot) {
-                   if (snapshot.hasError) {
-                     return const Center(
-                       child: Text('An error has occurred!'),
-                     );
-                   } else if (snapshot.hasData) {
-                     return QuestionList(questions: snapshot.data!);
-                   } else {
-                     return const Center(
-                       child: CircularProgressIndicator(),
-                     );
-                   }
-                 },
-               ),
               )
-             ],
-           ),
-         ),
-       ],
-     ),
-
+          )
+        ]),
+      
       ),
+
     );
   }
 }
 
-class QuestionList extends StatelessWidget {
-  const QuestionList({super.key, required this.questions});
+class QuestionsList extends StatelessWidget {
+  const QuestionsList({super.key, required this.Questions});
 
-  final List<Question> questions;
+  final List<Question> Questions;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
 
-      itemCount: questions.length,
+      itemCount: Questions.length,
       itemBuilder: (context, index) {
 
         return ListTile(
-          title: Text(questions[index].title),
-          subtitle: Text(questions[index].detail),
-          leading: Image.network(questions[index].attachment),
+          title: Text(Questions[index].title!),
+          subtitle: Text(Questions[index].detail!),
+          leading: Image.network(Questions[index].attachment!),
           trailing: Icon(Icons.arrow_forward_ios_rounded),
           onTap: (){
-
-
+            if(Questions[index].answer!=null){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  AnswerPage(
+                  title: Questions[index].title!,
+                  answer:  Answer(id: Questions[index].answer?.id, shortAnswer: Questions[index].answer?.shortAnswer, longAnswer:Questions[index].answer?.longAnswer),
+                )),
+              );
+            }
 
           },
         );

@@ -60,7 +60,7 @@ class TopicsList extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) =>  QuestionPage(
-              title: 'Title',
+              title: Topics[index].title,
               topic: Topic(id: Topics[index].id, title: Topics[index].title, detail: Topics[index].detail, banner: Topics[index].banner),
             )),
           );

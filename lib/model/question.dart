@@ -3,10 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:orthodox_melsalat/model/answer.dart';
 
 Future<List<Question>> fetchQuestions(http.Client client, int topic_id) async {
   final response = await client
-      .get(Uri.parse("http://192.168.0.139:8000/api/topic/"+topic_id.toString()));
+      .get(Uri.parse("https://orthodoxmelsalat.herokuapp.com/api/topic/"+topic_id.toString()));
 
   // Use the compute function to run parseQuestions in a separate isolate.
   return compute(parseQuestions, response.body);
@@ -20,18 +21,21 @@ List<Question> parseQuestions(String responseBody) {
 }
 
 class Question {
-  final int id;
-  final int topic_id;
-  final String title;
-  final String detail;
-  final String attachment;
+  final int? id;
+  final int? topic_id;
+  final String? title;
+  final String? detail;
+  final String? attachment;
+  final Answer? answer;
 
-  const Question({
-    required this.id,
-    required this.title,
-    required this.detail,
-    required this.topic_id,
-    required this.attachment,
+   Question({
+      this.id,
+      this.title,
+      this.detail,
+      this.topic_id,
+      this.attachment,
+      this.answer,
+
   });
 
   factory Question.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,18 @@ class Question {
       title: json['title'] as String,
       detail: json['detail'] as String,
       attachment: json['attachment'] as String,
+      answer: json["answer"] == null ? null : Answer.fromJson(json["answer"]),
     );
   }
+
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "detail": detail,
+    "topic_id": topic_id,
+    "attachment": attachment,
+    "answer": answer == null ? 'null' : answer!.toJson(),
+  };
+
 }

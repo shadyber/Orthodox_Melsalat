@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 Future<List<Topic>> fetchTopics(http.Client client) async {
   final response = await client
-      .get(Uri.parse('http://192.168.0.139:8000/api/topics'));
+      .get(Uri.parse('https://orthodoxmelsalat.herokuapp.com/api/topics'));
 
   // Use the compute function to run parseTopics in a separate isolate.
   return compute(parseTopics, response.body);
