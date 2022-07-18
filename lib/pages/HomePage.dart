@@ -1,33 +1,42 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:orthodox_melsalat/components/MainAppbar.dart';
+import 'package:orthodox_melsalat/components/NavigationDrawer.dart';
 import 'package:orthodox_melsalat/model/topic.dart';
 import 'package:http/http.dart' as http;
 import 'package:orthodox_melsalat/pages/questionspage.dart';
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatelessWidget  {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: title,
       home: Scaffold(
-        appBar: MainAppBar(title: 'Topics',),
+        appBar: MainAppbar(title: 'Welcome',),
+        drawer: NavigationDrawer(),
         body: FutureBuilder<List<Topic>>(
           future: fetchTopics(http.Client()),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
+
               return const Center(
-                child: Text('An error has occurred!'),
+                 child: Text('Error Loading Data'),
               );
             } else if (snapshot.hasData) {
               return TopicsList(Topics: snapshot.data!);
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return  Stack(
+                children: [
+
+                  Center(child: CircularProgressIndicator()),
+
+                ],
               );
             }
           },

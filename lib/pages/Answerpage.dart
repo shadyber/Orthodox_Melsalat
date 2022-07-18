@@ -18,20 +18,20 @@ class AnswerPage extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.white60,
         drawer: NavigationDrawer(),
-        appBar: MainAppBar(title: 'Answer For '+ question.title!,),
+        appBar: MainAppbar(title: 'Answer For '+ question.title!,),
         body: Column(
 
           children: [
-            Text(question.title!,style: TextStyle(
+            Text(question.title!,style: const TextStyle(
               fontStyle: FontStyle.italic,
               fontSize: 12,
             )),
-            Text(question.detail!,style: TextStyle(
+            Text(question.detail!,style: const TextStyle(
               fontStyle: FontStyle.italic,
               fontSize: 11,
             )),
-            SizedBox(height: 3,),
-            Text('Answer', style: TextStyle(
+            const SizedBox(height: 3,),
+            const Text('Answer', style: TextStyle(
               fontStyle: FontStyle.italic,
               fontSize: 25,
             ),),

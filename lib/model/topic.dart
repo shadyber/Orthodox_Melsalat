@@ -1,16 +1,27 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 Future<List<Topic>> fetchTopics(http.Client client) async {
-  final response = await client
-      .get(Uri.parse('https://orthodoxmelsalat.herokuapp.com/api/topics'));
+  const jsonKey = 'topics';
+  final prefs = await SharedPreferences.getInstance();
 
-  // Use the compute function to run parseTopics in a separate isolate.
-  return compute(parseTopics, response.body);
-}
+  final connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.none) {
+
+print(prefs.getString(jsonKey));
+    return compute(parseTopics, prefs.getString(jsonKey)!);
+
+  } else {
+    final response = await client
+        .get(Uri.parse('https://orthodoxmelsalat.herokuapp.com/api/topics'));
+    await prefs.setString(jsonKey, response.body);
+    return compute(parseTopics, response.body);
+  }
+  }
 
 // A function that converts a response body into a List<Topic>.
 List<Topic> parseTopics(String responseBody) {

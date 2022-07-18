@@ -20,8 +20,8 @@ class QuestionPage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: title,
       home: Scaffold(
-        drawer: NavigationDrawer(),
-        appBar: MainAppBar(title: title.toString(),),
+        drawer: const NavigationDrawer(),
+        appBar: MainAppbar(title: title.toString(),),
         body: Column(children: <Widget>[
            Image.network(topic.banner),
            Text("Question Under this Topic"),
